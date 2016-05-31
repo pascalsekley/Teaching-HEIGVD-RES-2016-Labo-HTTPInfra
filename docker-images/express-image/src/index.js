@@ -12,7 +12,7 @@ server.route({
     method: 'GET',
     path: '/',
     handler: function (request, reply) {
-        reply(generateStudents());
+        reply(generateCurrency());
         
     }
 });
@@ -26,7 +26,7 @@ server.start((err) => {
 });
 
 
-function generateStudents() { 
+function generateCurrency() { 
   var numberOfCurrencies = chance.integer({ 
     min: 0, 
 	max: 10
