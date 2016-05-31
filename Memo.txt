@@ -1,0 +1,33 @@
+Part: 1
+Nom de l'image: php:5.6-apache
+
+Adresse IP pour tester dans le navigateur: 192.168.99.100:9090
+
+docker inspect (nom du contenaire) ----> info dans lesquelles on retrouve l'@ip
+
+docker exec -it (nom de l'image) /bin/bash ----> Ouvrir un terminal dans la machine virtuelle
+root@458569856323:/var/www/html# ----> connecté en tant que root dans la VM
+cd /etc/apache2/ ensuite ls ----> la listes des fichiers de configs 
+
+
+// Dans le repertoire apache-images
+Pour faire un build: docker build -t res/apache_php .
+Pour faire un run: docker run -p 9090:80 res/apache_php
+
+Pour faire un kill:  docker kill gloomy_noyce (nom de contenaire)
+
+Pour le demarrer: docker run -p 9090:80 res/apache_php ---> mapping entre le port d'écoute du contenaire (9090) et celui ou je me mappe (80)
+
+Part: 2
+CMD ["node", "/opt/app/index.js"] -----> A chaque fois que le contenaire démarre il va exécuter le script index.jx
+
+nmp install --save change -----> Rajoute les dependances sur chance.
+
+docker run -it res/express_student /bin/bash ------> Se connecter en intéractif dans le contenaire ensuite on peut faire un cd /op/app pour voir ce qui à été copier dans le file système du contenaire au lancement.
+
+npm install express-generator -g -------> pour installer l'outils de facon globale
+
+npm install --save hapi
+
+GET / HTTP/1.0
+
