@@ -85,11 +85,23 @@ Host: demo.res.ch
 
 Maintenant en faisant avec GET /api/students HTTP/1.0 -----> Ici sans le slash c'est la règle par défaut/générale que sera appliquée
 
-----PROCEDURE DEMARRAGE----
+----PROCEDURE DEMARRAGE---- Step 3
 docker build -t res/apache_php . ------> démarrage du premier contenaire
+docker run -d res/apache_php
 docker build -t res/hapi_currency .-----> démarrage du deuxième contenaire
+docker run -d res/hapi_currency
 docker build -t res/apache_rp . ------> en étant dans apache-reverse-proxy
 docker run -p 8080:80 res/apache_rp ----> demarrer le reverse-proxy
 
+docker stop $(docker ps -a -q) ---------> Pour stop tous les contenaires en cours 
+
 Ensuite URL: http://demo.res.ch:8080/------------------> Pour afficher le site avec bootstrap
 	URL: http://demo.res.ch:8080/api/students/ ----> Pour afficher les currency
+
+
+Part: 4
+docker run -d --name apache_static res/apache_php
+docker run -d --name hapi_dynamic res/hapi_currency
+docker run -d -p 8080:80 --name apache_rp res/apache_rp
+
+docker inspect stupefied_ride | grep -i ipadd ----> Pour voir l'adresse IP
