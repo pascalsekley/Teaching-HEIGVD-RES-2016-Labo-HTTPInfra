@@ -28,7 +28,7 @@ server.start((err) => {
 
 function generateCurrency() { 
   var numberOfCurrencies = chance.integer({ 
-    min: 0, 
+    min: 1, 
 	max: 10
   }); 
   console.log(numberOfCurrencies); 

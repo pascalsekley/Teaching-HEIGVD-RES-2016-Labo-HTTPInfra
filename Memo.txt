@@ -31,3 +31,65 @@ npm install --save hapi
 
 GET / HTTP/1.0
 
+Part: 3
+Reverse Proxy, permet de redigirer certaine requêtes vers le bon contenaire en fonction des URL
+
+pour créer le reverse proxy et démarrer le contenaire: docker run -it -p 8080:80 php:5.6-apache /bin/bash
+Le mapping permet de me connecter, ce qui permet de ce connecter au contenaire depuis l'extéreir.
+
+ProxyPass "/api/students/" "http://www.example.com" ----> Si l'URL commence par /api/students, je veux aller vers example.com
+
+root@5a6278170127:/etc/apache2# a2ensite 001* ------> Pour activer le proxy
+root@5a6278170127:/etc/apache2# a2enmod proxy_http ----> Pour activer le proxy_http
+
+<VirtualHost *:80>
+
+        #ServerName demo.res.ch
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        ProxyPass "/api/student/" "http://172.17.0.3:3000/"    -------> Redirection en fonction ce qu'on recoit
+        ProxyPassReverse "/api/student/" "http://172.17.0.3:3000/"
+
+        ProxyPass "/" "http://172.17.0.2:80/"
+        ProxyPassReverse "/" "http://172.17.0.2:80/"
+
+</VirtualHost>
+
+
+
+
+root@f2784a3100f4:/etc/apache2# service apache2 restart
+[FAIL failed!ting web server: apache2
+[warn (warning).e2 configtest failed. ...
+Output of config test was:
+AH00526: Syntax error on line 8 of /etc/apache2/sites-enabled/001-reverse-proxy.conf:
+Invalid command 'ProxyPass', perhaps misspelled or defined by a module not included in the server configuration
+Action 'configtest' failed.
+The Apache error log may have more information.
+
+---------> Normal car on a pa encore activé les modules qui sont nécessaires.
+
+Part c)
+RUN a2enmod proxy proxy_http -----> activer ses modules
+RUN a2ensite 000-* 001-* ---------> activer ses virtualhosts
+
+On va rajouter des choses dans le dossier site-available de apache2, on écrase pas!
+
+docker run -p 8080:80 res/apache_rp --------> map du port 80 du reverse poxy au port 8080 de la VM.
+
+En faisant un telnet 192.168.99.100 8080
+GET /api/students/ HTTP/1.0
+Host: demo.res.ch
+
+Maintenant en faisant avec GET /api/students HTTP/1.0 -----> Ici sans le slash c'est la règle par défaut/générale que sera appliquée
+
+----PROCEDURE DEMARRAGE----
+docker build -t res/apache_php . ------> démarrage du premier contenaire
+docker build -t res/hapi_currency .-----> démarrage du deuxième contenaire
+docker build -t res/apache_rp . ------> en étant dans apache-reverse-proxy
+docker run -p 8080:80 res/apache_rp ----> demarrer le reverse-proxy
+
+Ensuite URL: http://demo.res.ch:8080/------------------> Pour afficher le site avec bootstrap
+	URL: http://demo.res.ch:8080/api/students/ ----> Pour afficher les currency
