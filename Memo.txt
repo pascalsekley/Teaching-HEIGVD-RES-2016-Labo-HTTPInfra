@@ -35,7 +35,7 @@ Part: 3
 Reverse Proxy, permet de redigirer certaine requêtes vers le bon contenaire en fonction des URL
 
 pour créer le reverse proxy et démarrer le contenaire: docker run -it -p 8080:80 php:5.6-apache /bin/bash
-Le mapping permet de me connecter, ce qui permet de ce connecter au contenaire depuis l'extéreir.
+Le mapping permet de me connecter, ce qui permet de ce connecter au contenaire depuis l'extérieur.
 
 ProxyPass "/api/students/" "http://www.example.com" ----> Si l'URL commence par /api/students, je veux aller vers example.com
 
@@ -79,7 +79,7 @@ On va rajouter des choses dans le dossier site-available de apache2, on écrase p
 
 docker run -p 8080:80 res/apache_rp --------> map du port 80 du reverse poxy au port 8080 de la VM.
 
-En faisant un telnet 192.168.99.100 8080
+En faisant un 
 GET /api/students/ HTTP/1.0
 Host: demo.res.ch
 
@@ -91,7 +91,7 @@ docker run -d res/apache_php
 docker build -t res/hapi_currency .-----> démarrage du deuxième contenaire
 docker run -d res/hapi_currency
 docker build -t res/apache_rp . ------> en étant dans apache-reverse-proxy
-docker run -p 8080:80 res/apache_rp ----> demarrer le reverse-proxy
+docker run -d -p 8080:80 res/apache_rp ----> demarrer le reverse-proxy
 
 docker stop $(docker ps -a -q) ---------> Pour stop tous les contenaires en cours 
 
@@ -105,3 +105,7 @@ docker run -d --name hapi_dynamic res/hapi_currency
 docker run -d -p 8080:80 --name apache_rp res/apache_rp
 
 docker inspect stupefied_ride | grep -i ipadd ----> Pour voir l'adresse IP
+
+
+
+Part: 5
